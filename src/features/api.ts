@@ -8,6 +8,33 @@ export interface UserProps {
   createdAt?: string;
 }
 
+export interface ProjectProps {
+  id?: string;
+  name: string;
+  description: string;
+  ownerId?: string;
+  createdAt?: string;
+}
+
+export interface IssueProps {
+  id?: string;
+  name: string;
+  description: string;
+  projectId: string;
+  priority: string;
+  dueDate: string;
+  assigneeId: string;
+  labels: string[];
+  createdAt: string;
+}
+
+export interface CommentsProps {
+  id?: string;
+  comment: string;
+  userId: string;
+  createdAt?: string;
+}
+
 export const userApi = {
   getUser: async (): Promise<UserProps> => {
     const { data } = await axiosClient.get("/user");
@@ -24,8 +51,79 @@ export const userApi = {
     return data.data;
   },
 
-  deleteUser: async (payload: UserProps) => {
-    const { data } = await axiosClient.delete("/user", payload);
+  deleteUser: async () => {
+    const { data } = await axiosClient.delete("/user");
+    return data.data;
+  },
+};
+
+export const projectApi = {
+  getAllProjects: async (): Promise<ProjectProps> => {
+    const { data } = await axiosClient.get("/project/all");
+    return data.data;
+  },
+
+  createProject: async (payload: ProjectProps) => {
+    const { data } = await axiosClient.post("/project", payload);
+    return data.date;
+  },
+
+  updateProject: async (projectId: string, payload: ProjectProps) => {
+    const { data } = await axiosClient.patch(`/project/${projectId}`, payload);
+    return data.data;
+  },
+
+  deleteProject: async (projectId: string) => {
+    const { data } = await axiosClient.delete(`/project/${projectId}`);
+    return data.data;
+  },
+};
+
+export const issueApi = {
+  getProjectIssues: async (projectId: string): Promise<IssueProps[]> => {
+    const { data } = await axiosClient.get(`/project/issue/${projectId}`);
+    return data.data;
+  },
+
+  getIssue: async (issueId: string): Promise<IssueProps> => {
+    const { data } = await axiosClient.get(`/project/${issueId}`);
+    return data.data;
+  },
+
+  createIssue: async (payload: IssueProps) => {
+    const { data } = await axiosClient.post("/issue", payload);
+    return data.date;
+  },
+
+  updateIssue: async (issueId: string, payload: ProjectProps) => {
+    const { data } = await axiosClient.patch(`/project/${issueId}`, payload);
+    return data.data;
+  },
+
+  deleteIssue: async (issueId: string) => {
+    const { data } = await axiosClient.delete(`/project/${issueId}`);
+    return data.data;
+  },
+};
+
+export const commentApi = {
+  getAllComments: async (issueId: string): Promise<CommentsProps> => {
+    const { data } = await axiosClient.get(`/issue/comment/${issueId}`);
+    return data.data;
+  },
+
+  createComment: async (payload: CommentsProps) => {
+    const { data } = await axiosClient.post("/comment", payload);
+    return data.date;
+  },
+
+  updateComment: async (commentId: string, payload: CommentsProps) => {
+    const { data } = await axiosClient.post(`/comment/${commentId}`, payload);
+    return data.data;
+  },
+
+  deleteComment: async (commentId: string) => {
+    const { data } = await axiosClient.delete(`/comment/${commentId}`);
     return data.data;
   },
 };
