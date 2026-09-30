@@ -21,9 +21,9 @@ export const userHooks = {
     });
   },
 
-  useDeleteUser: (payload: UserProps) => {
+  useDeleteUser: () => {
     return useMutation({
-      mutationFn: () => userApi.deleteUser(payload),
+      mutationFn: () => userApi.deleteUser(),
     });
   },
 };
