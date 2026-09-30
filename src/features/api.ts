@@ -90,8 +90,8 @@ export const issueApi = {
     return data.data;
   },
 
-  createIssue: async (payload: IssueProps) => {
-    const { data } = await axiosClient.post("/issue", payload);
+  createIssue: async (projectId: string, payload: IssueProps) => {
+    const { data } = await axiosClient.post(`/issue/${projectId}`, payload);
     return data.date;
   },
 
@@ -113,7 +113,7 @@ export const commentApi = {
   },
 
   createComment: async (payload: CommentsProps) => {
-    const { data } = await axiosClient.post("/comment", payload);
+    const { data } = await axiosClient.post(`/comment`, payload);
     return data.date;
   },
 
