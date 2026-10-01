@@ -15,12 +15,49 @@ import {
   FieldLabel,
 } from "../../components/ui/field";
 import { Input } from "../../components/ui/input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { userHook } from "../features/hooks";
+import { Spinner } from "../../components/ui/spinner";
+
+import { useState } from "react";
 
 export default function SignUp({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  // const [formData, setFormData] = useState({
+  //   name: "",
+  //   email: "",
+  //   password: "",
+  // });
+
+  const navigate = useNavigate()
+  const createUser = userHook.useCreateUser();
+  const [user, setUser] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  // function handleChange(e) {
+  //   const { name, value } = e.target;
+  //   setFormData((prev) => ({ ...prev, [name]: value }));
+  // }
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const payload = {
+      name: user,
+      email: email,
+      password: password,
+    };
+
+    await createUser.mutateAsync(payload, {
+      onSuccess: () => {
+        navigate("/")
+      },
+    });
+  }
+
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-sm">
@@ -33,8 +70,19 @@ export default function SignUp({
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form>
+              <form onSubmit={handleSubmit}>
                 <FieldGroup>
+                  <Field>
+                    <FieldLabel htmlFor="name">Name</FieldLabel>
+                    <Input
+                      id="name"
+                      type="text"
+                      value={user}
+                      placeholder="John Doe"
+                      required
+                      onChange={(e) => setUser(e.target.value)}
+                    />
+                  </Field>
                   <Field>
                     <FieldLabel htmlFor="email">Email</FieldLabel>
                     <Input
@@ -42,24 +90,43 @@ export default function SignUp({
                       type="email"
                       placeholder="m@example.com"
                       required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                   </Field>
                   <Field>
-                    <div className="flex items-center">
-                      <FieldLabel htmlFor="password">Password</FieldLabel>
+                    <FieldLabel htmlFor="password">Password</FieldLabel>
+                    <Input
+                      id="password"
+                      type="password"
+                      value={password}
+                      required
+                      placeholder="******"
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                    {/*<div className="flex items-center">
                       <a
                         href="#"
                         className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                       >
                         Forgot your password?
                       </a>
-                    </div>
-                    <Input id="password" type="password" required />
+                    </div>*/}
                   </Field>
                   <Field>
-                    <Button type="submit">Login</Button>
+                    <Button type="submit" disabled={createUser.isPending}>
+                      {createUser.isPending ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <Spinner className="h-4 w-4" />
+                          <span>Processing...</span>
+                        </span>
+                      ) : (
+                        "Sign Up"
+                      )}
+                    </Button>
                     <FieldDescription className="text-center">
-                      Don&apos;t have an account? <Link to="/login">Log In</Link>
+                      Don&apos;t have an account?{" "}
+                      <Link to="/login">Log In</Link>
                     </FieldDescription>
                   </Field>
                 </FieldGroup>
