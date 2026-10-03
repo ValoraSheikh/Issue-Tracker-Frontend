@@ -2,7 +2,7 @@ import { axiosClient } from "../lib/axois/axios-client";
 
 export interface UserProps {
   id?: string;
-  name: string;
+  name?: string;
   email: string;
   password: string;
   createdAt?: string;
@@ -14,6 +14,11 @@ export interface ProjectProps {
   description: string;
   ownerId?: string;
   createdAt?: string;
+}
+
+export interface GetAllPropertiesProps {
+  users: UserProps;
+  projects: ProjectProps;
 }
 
 export interface IssueProps {
@@ -36,7 +41,12 @@ export interface CommentsProps {
 }
 
 export const userApi = {
-  getUser: async (): Promise<UserProps> => {
+  loginUser: async (payload: UserProps) => {
+    const { data } = await axiosClient.post("/auth/login", payload);
+    return data;
+  },
+
+  getUser: async (): Promise<UserProps[]> => {
     const { data } = await axiosClient.get("/user");
     return data.data;
   },
@@ -58,7 +68,7 @@ export const userApi = {
 };
 
 export const projectApi = {
-  getAllProjects: async (): Promise<ProjectProps> => {
+  getAllProjects: async (): Promise<GetAllPropertiesProps[]> => {
     const { data } = await axiosClient.get("/project/all");
     return data.data;
   },
