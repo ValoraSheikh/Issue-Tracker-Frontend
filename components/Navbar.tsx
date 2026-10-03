@@ -16,10 +16,8 @@ export default function Navbar() {
 
           {/* Navigation Links (Desktop) */}
           <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-            <Link to="/" className="transition-colors hover:text-primary">Home</Link>
-            <Link to="/about" className="transition-colors hover:text-primary">About</Link>
-            <Link to="/services" className="transition-colors hover:text-primary">Services</Link>
-            <Link to="/contact" className="transition-colors hover:text-primary">Contact</Link>
+            <Link to="/projects" className="transition-colors hover:text-primary">Projects</Link>
+            <Link to="/profile" className="transition-colors hover:text-primary">Profile</Link>
           </nav>
 
           {/* Action Button */}
@@ -27,7 +25,7 @@ export default function Navbar() {
             <Link to="/login" className="text-sm font-medium hover:text-primary">
               Log in
             </Link>
-            <Button asChild>
+            <Button>
               <Link to="/signup">Sign Up</Link>
             </Button>
           </div>
