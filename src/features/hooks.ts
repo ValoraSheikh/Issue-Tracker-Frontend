@@ -9,6 +9,7 @@ import {
   commentApi,
   type CommentsProps,
 } from "./api";
+import { toast } from "../../components/ui/toast";
 
 export const userHook = {
   useUser: () => {
@@ -18,9 +19,39 @@ export const userHook = {
     });
   },
 
-  useCreateUser: (payload: UserProps) => {
+  useLoginUser: () => {
     return useMutation({
-      mutationFn: () => userApi.createUser(payload),
+      mutationFn: (payload: UserProps) => userApi.loginUser(payload),
+      onSuccess: () => {
+        toast.add({
+          type: "success",
+          description: "User Login Succesfully",
+        });
+      },
+      onError: () => {
+        toast.add({
+          type: "error",
+          description: "User Login failed",
+        });
+      },
+    });
+  },
+
+  useCreateUser: () => {
+    return useMutation({
+      mutationFn: (payload: UserProps) => userApi.createUser(payload),
+      onSuccess: () => {
+        toast.add({
+          type: "success",
+          description: "User Created Succesfully",
+        });
+      },
+      onError: (err) => {
+        toast.add({
+          type: "error",
+          description: `${err.message}`,
+        });
+      },
     });
   },
 
@@ -45,9 +76,9 @@ export const projectHook = {
     });
   },
 
-  useCreateProject: (payload: ProjectProps) => {
+  useCreateProject: () => {
     return useMutation({
-      mutationFn: () => projectApi.createProject(payload),
+      mutationFn: (payload: ProjectProps) => projectApi.createProject(payload),
     });
   },
 
