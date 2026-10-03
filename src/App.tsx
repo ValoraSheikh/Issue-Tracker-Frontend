@@ -2,18 +2,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import SignUp from "./auth/sign-up";
 import Login from "./auth/login";
+import Profile from "./profile/profile";
+import RequireAuth  from "./lib/auth/auth-utils";
+import Projects from "./project/project";
 
 function Home() {
   return <h1>Home Page</h1>;
 }
 
-function About() {
-  return <h1>About Page</h1>;
-}
-
-function Contact() {
-  return <h1 className="bg-amber-400">Contact Page</h1>;
-}
 
 function App() {
   return (
@@ -26,10 +22,13 @@ function App() {
       {/* Routes */}
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
+        
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
+        <Route element={<RequireAuth />}>
+          <Route path="/projects" element={<Projects/>}/>
+          <Route path="/profile" element={<Profile />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
